@@ -1,5 +1,5 @@
 export type Feedback = {
-  id: number;
+  id: string;
   category: string;
   description: string;
   status: string;
@@ -16,9 +16,11 @@ export type FeedbacksComments = {
 };
 
 export type User = {
+  id: string;
   image: string;
   name: string;
   username: string;
+  upvoteFeedbackIDs: string[];
 };
 
 export type FeedbacksCommentsReplies = {
