@@ -11,28 +11,35 @@ type FeedbacksComments {
   content String
   id      Int
   replies FeedbacksCommentsReplies[]
-  user    User
+  user    UserType
 }
 
 type FeedbacksCommentsReplies {
   content    String
   replyingTo String
-  user       User
+  user       UserType
 }
 
-type User {
+type UserType {
   image    String
   name     String
   username String
 }
 
-model Feedbacks {
+model Feedback {
   id          String              @id @default(auto()) @map("_id") @db.ObjectId
   category    String
   comments    FeedbacksComments[]
   description String
-  id_         Int                 @map("id")
-  status      String
+  status      String              @default("suggestion")
   title       String
-  upvotes     Int
+  upvotes     Int                 @default(0)
+}
+
+model User {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  image             String
+  name              String
+  username          String
+  upvoteFeedbackIDs String[]
 }
