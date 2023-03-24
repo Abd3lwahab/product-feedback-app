@@ -1,18 +1,30 @@
 import Head from 'next/head';
 import { Jost } from 'next/font/google';
+import { useEffect } from 'react';
+import { useRecoilState } from 'recoil';
 
 import prisma from '@/lib/prisma';
 import SideBar from '@/components/Sidebar';
 import Suggestions from '@/components/Suggestions';
-import { Feedback } from '@/types';
+import { Feedback, User } from '@/types';
+import { feedbackListState } from '@/atoms/FeedbackAtom';
+import { currentUserState } from '@/atoms/currentUserAtom';
 
 const jost = Jost({ subsets: ['latin'] });
 
 type Props = {
-  feedbacks: Feedback[];
+  feedbackList: Feedback[];
+  currentUser: User;
 };
 
-export default function Home({ feedbacks }: Props) {
+export default function Home({ feedbackList, currentUser }: Props) {
+  const [_f, setFeedbacksList] = useRecoilState<Feedback[]>(feedbackListState);
+  const [_u, setCurrentUser] = useRecoilState<User>(currentUserState);
+  useEffect(() => {
+    setFeedbacksList(feedbackList);
+    setCurrentUser(currentUser);
+  }, []);
+
   return (
     <>
       <Head>
@@ -26,7 +38,7 @@ export default function Home({ feedbacks }: Props) {
       >
         <div className="flex lg:flex-row flex-col justify-center md:py-14 md:px-10 lg:py-[94px]">
           <SideBar />
-          <Suggestions feedbacksList={feedbacks} />
+          <Suggestions />
         </div>
       </main>
     </>
@@ -34,9 +46,10 @@ export default function Home({ feedbacks }: Props) {
 }
 
 export async function getStaticProps() {
-  const feedbacks = await prisma.feedbacks.findMany();
+  const feedbackList = await prisma.feedback.findMany();
+  const currentUser = await prisma.user.findFirst();
 
   return {
-    props: { feedbacks },
+    props: { feedbackList, currentUser },
   };
 }
