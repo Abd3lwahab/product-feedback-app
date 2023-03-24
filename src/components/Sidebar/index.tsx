@@ -1,19 +1,21 @@
-import React, { useState } from "react";
-import Tag from "../Tag";
-import Roadmap from "../Roadmap";
+import React from 'react';
+import Tag from '../Tag';
+import Roadmap from '../Roadmap';
+import { useRecoilState } from 'recoil';
 
-import backgroundDesktop from "../../assets/suggestions/desktop/background-header.png";
-import backgroundTablet from "../../assets/suggestions/tablet/background-header.png";
-import backgroundMobile from "../../assets/suggestions/mobile/background-header.png";
-import Image from "next/image";
+import backgroundDesktop from '../../assets/suggestions/desktop/background-header.png';
+import backgroundTablet from '../../assets/suggestions/tablet/background-header.png';
+import backgroundMobile from '../../assets/suggestions/mobile/background-header.png';
+import Image from 'next/image';
+import { activeFeedbackFilterState } from '@/atoms/FeedbackAtom';
 
-const tags = ["All", "UI", "UX", "Enhancement", "Bugs", "Feature"];
+const tags = ['all', 'UI', 'UX', 'enhancement', 'bug', 'feature'];
 
 const SideBar = () => {
-  const [activeTag, setActiveTag] = useState<string>(tags[0]);
+  const [activeFilter, setActiveFilter] = useRecoilState<string>(activeFeedbackFilterState);
 
   const tagClickHandler = (tagName: string): void => {
-    setActiveTag(tagName);
+    setActiveFilter(tagName);
   };
 
   return (
@@ -43,7 +45,7 @@ const SideBar = () => {
             <div className="mb-[14px] inline-block" key={tag}>
               <Tag
                 name={tag}
-                isActive={activeTag === tag}
+                isActive={activeFilter === tag}
                 clickHanlder={() => tagClickHandler(tag)}
               />
             </div>

@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import React from 'react';
-import IconArrowUp from '../../assets/shared/icon-arrow-up.svg';
+import IconArrowUpBlue from '../../assets/shared/icon-arrow-up.svg';
+import IconArrowUpWhite from '../../assets/shared/icon-arrow-up-white.svg';
 
 type Props = {
   name: string | number;
@@ -19,7 +20,13 @@ const Tag = ({ name, isActive, isVote, clickHanlder }: Props): React.ReactElemen
       } ${isVote ? 'w-10 h-14 flex flex-col items-center justify-center' : 'px-4 py-1 mr-2'}`}
       onClick={clickHanlder}
     >
-      {isVote && <Image src={IconArrowUp} className="mb-2" alt="upper_arrow" />}
+      {isVote && (
+        <Image
+          src={isActive ? IconArrowUpWhite : IconArrowUpBlue}
+          className="mb-2"
+          alt="upper_arrow"
+        />
+      )}
       <span className="capitalize text-body-3 font-semibold">{name}</span>
     </div>
   );

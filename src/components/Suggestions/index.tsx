@@ -1,24 +1,15 @@
 import React from 'react';
-import Tag from '../Tag';
+import { useRecoilState } from 'recoil';
 
 import EmptyContent from './EmptyContent';
 import SuggestionsBar from './SuggestionsBar';
-import FeedbackList from '../Feedback/FeedbackList';
-import { Feedback } from '@/types';
+import FeedbackList from './FeedbackList';
 
-type Props = {
-  feedbacksList: Feedback[];
-};
-
-const Suggestions = ({ feedbacksList }: Props) => {
+const Suggestions = ({}) => {
   return (
     <div className="w-full lg:max-w-[825px]">
-      <SuggestionsBar length={feedbacksList.length} />
-      {feedbacksList.length === 0 ? (
-        <EmptyContent />
-      ) : (
-        <FeedbackList feedbacksList={feedbacksList} />
-      )}
+      <SuggestionsBar />
+      <FeedbackList />
     </div>
   );
 };
