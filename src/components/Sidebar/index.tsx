@@ -21,7 +21,7 @@ const SideBar = () => {
   return (
     <div className="flex flex-row lg:flex-col lg:mr-[30px] mdo:mb-10 h-fit">
       <div className="grid grid-cols-1 w-full md:w-auto lg:mb-6 mdo:mr-[10px] lg:w-[255px] md:flex-1">
-        <div className="relative col-start-1 row-start-1 flex flex-col-reverse pl-6 py-4">
+        <div className="relative col-start-1 row-start-1 flex flex-col-reverse pl-6 md:py-4 py-0 justify-center md:justify-start">
           <span className="text-body-3 md:text-body-2 text-white opacity-75">Feedback Board</span>
           <h2 className="font-bold text-body-2 md:text-h2 text-white">Frontend Mentor</h2>
         </div>
