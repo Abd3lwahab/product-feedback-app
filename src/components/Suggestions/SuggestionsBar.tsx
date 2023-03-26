@@ -5,10 +5,16 @@ import { useRecoilState } from 'recoil';
 import SuggestionsIcon from '@/assets/suggestions/icon-suggestions.svg';
 import Button from '@/components/Button';
 import { Feedback } from '@/types';
-import { feedbackListState } from '@/atoms/FeedbackAtom';
+import { activeFeedbackSortState, feedbackListState } from '@/atoms/FeedbackAtom';
+import Link from 'next/link';
 
 function SuggestionsBar() {
   const [feedbackList] = useRecoilState<Feedback[]>(feedbackListState);
+  const [activeSort, setActiveSort] = useRecoilState<string>(activeFeedbackSortState);
+
+  const handleSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setActiveSort(e.target.value);
+  };
 
   return (
     <div className="flex flex-row bg-blue-darkest md:rounded-lg  pl-6 pr-4 py-[14px] mb-6 justify-between items-center ">
@@ -24,15 +30,19 @@ function SuggestionsBar() {
           <select
             id="sort"
             className="bg-blue-darkest text-blue-light text-h4 focus:outline-none hover:cursor-pointer"
+            onChange={handleSort}
+            defaultValue={activeSort}
           >
-            <option>Most Upvotes</option>
-            <option>Least Upvotes</option>
-            <option>Most Comments</option>
-            <option>Least Comments</option>
+            <option value={'most-vote'}>Most Upvotes</option>
+            <option value={'least-vote'}>Least Upvotes</option>
+            <option value={'most-comments'}>Most Comments</option>
+            <option value={'least-comments'}>Least Comments</option>
           </select>
         </div>
       </div>
-      <Button color={'purple'} text="+ Add Feedback" onClick={() => {}} />
+      <Link href={'new-feedback'}>
+        <Button color={'purple'} text="+ Add Feedback" onClick={() => {}} />
+      </Link>
     </div>
   );
 }
