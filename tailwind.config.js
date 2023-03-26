@@ -21,7 +21,7 @@ module.exports = {
     fontSize: {
       'body-1': ['16px', '23px'],
       'body-2': ['15px', '22px'],
-      'body-3': ['13px', '19px'],
+      'body-3': ['14px', '20px'],
       h1: [
         '24px',
         {
@@ -63,8 +63,9 @@ module.exports = {
       borderRadius: {
         none: '0',
         lg: '10px',
+        md: '5px',
       },
     },
   },
   plugins: [],
-}
+};
