@@ -10,3 +10,8 @@ export const activeFeedbackFilterState = atom({
   key: 'activeFeedbackFilterState',
   default: 'all',
 });
+
+export const activeFeedbackSortState = atom({
+  key: 'activeFeedbackSortState',
+  default: 'most-vote',
+});

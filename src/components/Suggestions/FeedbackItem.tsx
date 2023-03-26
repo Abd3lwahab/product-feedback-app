@@ -44,7 +44,7 @@ function FeedbackItem({ feedback }: Props) {
       });
   };
   return (
-    <div className="bg-white px-8 py-7 rounded-lg mb-5 flex flex-row justify-between cursor-pointer mx-6 md:mx-0">
+    <div className="bg-white p-6 md:p-8 rounded-lg mb-5 flex flex-row justify-between cursor-pointer mx-6 md:mx-0">
       <div className="flex flex-row">
         <div className="mr-10">
           <Tag isVote={true} name={upvotes} isActive={isUpvoted} clickHanlder={handleUpvote} />
