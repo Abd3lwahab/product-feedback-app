@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { MouseEvent, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import Image from 'next/image';
 import axios from 'axios';
@@ -8,6 +8,7 @@ import Tag from '@/components/Tag';
 import IconComment from '@/assets/shared/icon-comments.svg';
 import { currentUserState } from '@/atoms/currentUserAtom';
 import { feedbackListState } from '@/atoms/FeedbackAtom';
+import Link from 'next/link';
 
 type Props = {
   feedback: Feedback;
@@ -20,7 +21,8 @@ function FeedbackItem({ feedback }: Props) {
   const [isUpvoted, setIsUpvoted] = useState<boolean>(upvotedFeedbacks.includes(feedback.id));
   const [upvotes, setUpvotes] = useState<number>(feedback.upvotes);
 
-  const handleUpvote = () => {
+  const handleUpvote = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     setIsUpvoted(!isUpvoted);
     setUpvotes(isUpvoted ? upvotes - 1 : upvotes + 1);
 
@@ -43,8 +45,15 @@ function FeedbackItem({ feedback }: Props) {
         });
       });
   };
+
   return (
-    <div className="bg-white p-6 md:p-8 rounded-lg mb-5 flex flex-row justify-between cursor-pointer mx-6 md:mx-0">
+    <Link
+      href={{
+        pathname: '/feedback/[id]',
+        query: { id: feedback.id },
+      }}
+      className="bg-white p-6 md:p-8 rounded-lg mb-5 flex flex-row justify-between cursor-pointer mx-6 md:mx-0"
+    >
       <div className="flex flex-row">
         <div className="mr-10">
           <Tag isVote={true} name={upvotes} isActive={isUpvoted} clickHanlder={handleUpvote} />
@@ -61,7 +70,7 @@ function FeedbackItem({ feedback }: Props) {
         <Image src={IconComment} className="mr-2" alt="comment" />
         <span className="text-body-1 text-blue-dark font-bold">{feedback.comments.length}</span>
       </div>
-    </div>
+    </Link>
   );
 }
 
