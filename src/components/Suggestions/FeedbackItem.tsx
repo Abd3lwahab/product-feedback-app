@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState } from 'react';
+import React, { MouseEvent, useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import Image from 'next/image';
 import axios from 'axios';
@@ -20,6 +20,11 @@ function FeedbackItem({ feedback }: Props) {
   const upvotedFeedbacks = currentUser?.upvoteFeedbackIDs || [];
   const [isUpvoted, setIsUpvoted] = useState<boolean>(upvotedFeedbacks.includes(feedback.id));
   const [upvotes, setUpvotes] = useState<number>(feedback.upvotes);
+
+  // Upadate upvote status when user state changes
+  useEffect(() => {
+    setIsUpvoted(upvotedFeedbacks.includes(feedback.id));
+  }, [currentUser]);
 
   const handleUpvote = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -52,7 +57,7 @@ function FeedbackItem({ feedback }: Props) {
         pathname: '/feedback/[id]',
         query: { id: feedback.id },
       }}
-      className="bg-white p-6 md:p-8 rounded-lg mb-5 flex flex-row justify-between cursor-pointer mx-6 md:mx-0"
+      className="bg-white p-6 md:p-8 rounded-lg mb-6 flex flex-row justify-between cursor-pointer mx-6 md:mx-0"
     >
       <div className="flex flex-row">
         <div className="mr-10">
