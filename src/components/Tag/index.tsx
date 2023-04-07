@@ -6,13 +6,13 @@ import IconArrowUpWhite from '../../assets/shared/icon-arrow-up-white.svg';
 type Props = {
   name: string | number;
   isActive: boolean;
-  clickHanlder?: () => void;
+  clickHanlder?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   isVote?: boolean;
 };
 
 const Tag = ({ name, isActive, isVote, clickHanlder }: Props): React.ReactElement => {
   return (
-    <div
+    <button
       className={`rounded-lg ${
         clickHanlder && 'cursor-pointer'
       }  hover:bg-[#CFD7FF] transition-colors duration-300 text-center ${
@@ -28,7 +28,7 @@ const Tag = ({ name, isActive, isVote, clickHanlder }: Props): React.ReactElemen
         />
       )}
       <span className="capitalize text-body-3 font-semibold">{name}</span>
-    </div>
+    </button>
   );
 };
 
