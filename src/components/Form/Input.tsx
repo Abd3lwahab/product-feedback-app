@@ -2,28 +2,31 @@ import React, { useState } from 'react';
 
 type Props = {
   id: string;
-  label: string;
-  description: string;
+  label?: string;
+  description?: string;
   type: 'text' | 'textarea';
+  placeholder?: string;
   onChange: (value: string) => void;
 };
 
-function Input({ id, label, description, type, onChange }: Props) {
-  const [value, setValue] = useState<string>('');
+function Input({ id, label, description, type, placeholder, onChange }: Props) {
   const [isValid, setIsValid] = useState<boolean>(true);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setValue(e.target.value);
     setIsValid(!!e.target.value);
     onChange(e.target.value);
   };
 
   return (
     <div className="flex flex-col mb-6">
-      <label htmlFor={id} className="text-blue-dark text-body-3 font-bold mb-[2px]">
-        {label}
-      </label>
-      <p className="text-blue-gray text-body-3 mb-4">{description}</p>
+      {label && description && (
+        <>
+          <label htmlFor={id} className="text-blue-dark text-body-3 font-bold mb-[2px]">
+            {label}
+          </label>
+          <p className="text-blue-gray text-body-3 mb-4">{description}</p>
+        </>
+      )}
       {type === 'text' ? (
         <input
           id={id}
@@ -35,8 +38,9 @@ function Input({ id, label, description, type, onChange }: Props) {
            }`}
           required={true}
           onInvalid={() => setIsValid(false)}
-          onBlur={() => setIsValid(!!value)}
           onChange={handleChange}
+          placeholder={placeholder}
+          defaultValue={''}
         />
       ) : (
         <textarea
@@ -50,8 +54,9 @@ function Input({ id, label, description, type, onChange }: Props) {
           rows={4}
           required={true}
           onInvalid={() => setIsValid(false)}
-          onBlur={() => setIsValid(!!value)}
           onChange={handleChange}
+          placeholder={placeholder}
+          defaultValue={''}
         />
       )}
       {!isValid && (
