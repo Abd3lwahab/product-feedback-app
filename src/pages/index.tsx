@@ -6,19 +6,15 @@ import SideBar from '@/components/Sidebar';
 import Suggestions from '@/components/Suggestions';
 import { Feedback, User } from '@/types';
 import { feedbackListState } from '@/atoms/FeedbackAtom';
-import { currentUserState } from '@/atoms/currentUserAtom';
 
 type Props = {
   feedbackList: Feedback[];
-  currentUser: User;
 };
 
-export default function Home({ feedbackList, currentUser }: Props) {
+export default function Home({ feedbackList }: Props) {
   const [_f, setFeedbacksList] = useRecoilState<Feedback[]>(feedbackListState);
-  const [_u, setCurrentUser] = useRecoilState<User>(currentUserState);
   useEffect(() => {
     setFeedbacksList(feedbackList);
-    setCurrentUser(currentUser);
   }, []);
 
   return (
@@ -31,9 +27,8 @@ export default function Home({ feedbackList, currentUser }: Props) {
 
 export async function getServerSideProps() {
   const feedbackList = await prisma.feedback.findMany();
-  const currentUser = await prisma.user.findFirst();
 
   return {
-    props: { feedbackList, currentUser },
+    props: { feedbackList },
   };
 }
