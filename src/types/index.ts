@@ -11,8 +11,14 @@ export type Feedback = {
 export type FeedbacksComments = {
   content: string;
   id: number;
-  replies: FeedbacksCommentsReplies[];
-  user: User;
+  replies?: FeedbacksCommentsReplies[];
+  user: UserComment;
+};
+
+export type UserComment = {
+  image: string;
+  name: string;
+  username: string;
 };
 
 export type User = {
