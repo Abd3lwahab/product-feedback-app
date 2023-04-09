@@ -4,41 +4,20 @@ import prisma from '@/lib/prisma';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     try {
-      const { userId, feedbackId, action } = req.body;
+      const { userId, feedbackId, action, userUpvoteFeedbackIDs } = req.body;
 
-      const user = await prisma.user.findUnique({ where: { id: userId } });
-
-      if (!user) {
-        return res.status(404).json({ message: 'User not found.' });
-      }
-
-      if (action === 'upvote' && !user.upvoteFeedbackIDs.includes(feedbackId)) {
-        const updatedUser = await prisma.user.update({
+      await Promise.all([
+        prisma.user.update({
           where: { id: userId },
-          data: { upvoteFeedbackIDs: { push: feedbackId } },
-        });
-        await prisma.feedback.update({
+          data: { upvoteFeedbackIDs: userUpvoteFeedbackIDs },
+        }),
+        prisma.feedback.update({
           where: { id: feedbackId },
-          data: { upvotes: { increment: 1 } },
-        });
+          data: { upvotes: action === 'upvote' ? { increment: 1 } : { decrement: 1 } },
+        }),
+      ]);
 
-        return res.status(200).json({ user: updatedUser });
-      } else if (action === 'downvote' && user.upvoteFeedbackIDs.includes(feedbackId)) {
-        const updatedUser = await prisma.user.update({
-          where: { id: userId },
-          data: {
-            upvoteFeedbackIDs: { set: user.upvoteFeedbackIDs.filter(id => id !== feedbackId) },
-          },
-        });
-        await prisma.feedback.update({
-          where: { id: feedbackId },
-          data: { upvotes: { decrement: 1 } },
-        });
-
-        return res.status(200).json({ user: updatedUser });
-      } else {
-        return res.status(500).json({ message: 'Unknown action or repeated.' });
-      }
+      return res.status(200).json({ message: 'Vote successful' });
     } catch (_) {
       return res.status(500).json({ message: 'Server error' });
     }

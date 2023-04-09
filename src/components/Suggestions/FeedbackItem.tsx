@@ -20,6 +20,7 @@ function FeedbackItem({ feedback }: Props) {
   const upvotedFeedbacks = currentUser?.upvoteFeedbackIDs || [];
   const [isUpvoted, setIsUpvoted] = useState<boolean>(upvotedFeedbacks.includes(feedback.id));
   const [upvotes, setUpvotes] = useState<number>(feedback.upvotes);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   // Upadate upvote status when user state changes
   useEffect(() => {
@@ -28,8 +29,15 @@ function FeedbackItem({ feedback }: Props) {
 
   const handleUpvote = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    if (isProcessing) return;
+    setIsProcessing(true);
+
     setIsUpvoted(!isUpvoted);
     setUpvotes(isUpvoted ? upvotes - 1 : upvotes + 1);
+
+    const userUpvoteFeedbackIDs = isUpvoted
+      ? currentUser.upvoteFeedbackIDs.filter(id => id !== feedback.id)
+      : [...currentUser.upvoteFeedbackIDs, feedback.id];
 
     axios
       .post(
@@ -38,16 +46,28 @@ function FeedbackItem({ feedback }: Props) {
           userId: currentUser.id,
           feedbackId: feedback.id,
           action: isUpvoted ? 'downvote' : 'upvote',
+          userUpvoteFeedbackIDs,
         },
         {
           headers: { 'Content-Type': 'application/json' },
         }
       )
       .then(res => {
-        setCurrentUser(res.data.user);
-        axios.get('/api/feedback').then(res => {
-          setFeedbackList(res.data);
-        });
+        if (res.status === 200) {
+          setCurrentUser({
+            ...currentUser,
+            upvoteFeedbackIDs: userUpvoteFeedbackIDs,
+          });
+          axios.get('/api/feedback').then(res => {
+            setFeedbackList(res.data);
+          });
+        } else {
+          setIsUpvoted(!isUpvoted);
+          setUpvotes(isUpvoted ? upvotes - 1 : upvotes + 1);
+        }
+      })
+      .finally(() => {
+        setIsProcessing(false);
       });
   };
 
