@@ -1,16 +1,17 @@
-import prisma from '@/lib/prisma';
-import { Feedback, User } from '@/types';
+import React, { useRef, useState } from 'react';
 import { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import axios from 'axios';
+import prisma from '@/lib/prisma';
+import { Feedback, User } from '@/types';
 import ArrowIcon from '@/assets/shared/icon-arrow-left.svg';
 import FeedbackItem from '@/components/Suggestions/FeedbackItem';
 import Button from '@/components/Button';
 import Input from '@/components/Form/Input';
 import { currentUserState } from '@/atoms/currentUserAtom';
-import { useRecoilState } from 'recoil';
-import axios from 'axios';
+import Comment from '@/components/Comment';
 
 type Props = {
   feedback: Feedback;
@@ -23,12 +24,12 @@ function feeddback({ feedback }: Props) {
   const [currentUser] = useRecoilState<User>(currentUserState);
   const [isCommenting, setIsCommenting] = useState<boolean>(false);
 
+  const formRef = useRef<HTMLFormElement>(null);
+
   const onCommentChange = (value: string) => {
     setComment(value);
     setRemainingCharacters(250 - value.length);
   };
-
-  const formRef = React.useRef<HTMLFormElement>(null);
 
   const handleComment = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -73,37 +74,8 @@ function feeddback({ feedback }: Props) {
       <FeedbackItem feedback={feedback} />
       <div className="bg-white p-6 md:p-8 rounded-lg mb-6 flex flex-col mx-6 md:mx-0">
         <h2 className="text-blue-dark text-h3 font-bold mb-7">{comments.length} Comments</h2>
-        {comments.map((comment, idx) => (
-          <div
-            key={comment.id}
-            className={`flex flex-row border-b-[1px] border-[#8C92B3] border-opacity-25  ${
-              idx === comments.length - 1 ? 'border-none pb-4' : ' mb-8 pb-8'
-            }`}
-          >
-            <div className="flex-none mr-8 w-10 h-10">
-              <Image
-                src={`/${comment.user.image}`}
-                alt="user"
-                width={40}
-                height={40}
-                className="rounded-full"
-              />
-            </div>
-            <div className="flex flex-1 flex-col">
-              <div className="flex flex-row justify-between">
-                <div className="flex flex-col mb-4">
-                  <span className="text-body-3 font-bold text-blue-dark">{comment.user.name}</span>
-                  <span className="text-body-3 text-blue-gray">@{comment.user.username}</span>
-                </div>
-                <div>
-                  <Link href={'/'} className="">
-                    <span className="text-blue text-body-4 font-bold">Reply</span>
-                  </Link>
-                </div>
-              </div>
-              <p className="text-body-2 text-blue-gray break-all">{comment.content}</p>
-            </div>
-          </div>
+        {comments.map(comment => (
+          <Comment comment={comment} key={comment.id} />
         ))}
       </div>
       <form
