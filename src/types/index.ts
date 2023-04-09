@@ -5,13 +5,13 @@ export type Feedback = {
   status: string;
   title: string;
   upvotes: number;
-  comments: FeedbacksComments[];
+  comments: FeedbacksComment[];
 };
 
-export type FeedbacksComments = {
+export type FeedbacksComment = {
   content: string;
   id: number;
-  replies?: FeedbacksCommentsReplies[];
+  replies?: FeedbacksCommentReplies[];
   user: UserComment;
 };
 
@@ -29,7 +29,7 @@ export type User = {
   upvoteFeedbackIDs: string[];
 };
 
-export type FeedbacksCommentsReplies = {
+export type FeedbacksCommentReplies = {
   content: string;
   replyingTo: string;
   user: User;
