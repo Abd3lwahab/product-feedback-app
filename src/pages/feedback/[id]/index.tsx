@@ -71,10 +71,6 @@ function feeddback({ feedback }: Props) {
       });
   };
 
-  const handlePostReply = (newCommentsList: FeedbacksComment[]) => {
-    setCurrentCommentList(newCommentsList);
-  };
-
   return (
     <div className="flex flex-col justify-start py-9 md:py-14 lg:py-[94px] max-w-[730px] m-auto md:px-0">
       <div className="flex flex-row justify-between items-center mb-6 mx-6 md:mx-0">
@@ -82,7 +78,14 @@ function feeddback({ feedback }: Props) {
           <Image src={ArrowIcon} alt="arrow" className="inline mr-3" />
           <span className="text-blue-gray text-body-3 font-bold">Go Back</span>
         </Link>
-        <Button color="blue" text="edit feedback" />
+        <Link
+          href={{
+            pathname: '/feedback/[id]/edit',
+            query: { id: feedback.id },
+          }}
+        >
+          <Button color="blue" text="edit feedback" onClick={() => {}} />
+        </Link>
       </div>
       <FeedbackItem feedback={feedback} />
       <div className="bg-white px-6 py-6 md:pt-6 md:pb-4 md:px-8 rounded-lg mb-6 flex flex-col mx-6 md:mx-0">
@@ -103,6 +106,7 @@ function feeddback({ feedback }: Props) {
           id="comment"
           onChange={onCommentChange}
           rows={3}
+          defaultValue=""
         />
         <div className="flex flex-row justify-between items-center">
           <span className="text-body-2 text-blue-gray">{remainingCharacters} Characters left</span>
