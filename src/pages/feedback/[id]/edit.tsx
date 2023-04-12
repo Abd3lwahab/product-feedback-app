@@ -124,12 +124,16 @@ export default function editFeedback({ feedback }: Props) {
             }}
           />
           <div className="flex flex-col-reverse md:flex-row justify-between pt-2 mb-0 md:mb-4">
-            <Button color="red" text="delete" isLoading={isLoadingDelete} onClick={handleDelete} />
-
+            <Button
+              color={'red'}
+              text="delete"
+              isLoading={isLoadingDelete}
+              onClick={handleDelete}
+            />
             <div className="flex flex-col-reverse md:flex-row justify-end">
               <Button
                 customClass="mr-0 my-4 md:mr-4 md:my-0"
-                color="blue-dark"
+                color={'blue-dark'}
                 text="cancel"
                 onClick={() => {
                   router.push({
