@@ -9,9 +9,9 @@ export type Feedback = {
 };
 
 export type FeedbacksComment = {
+  id: string;
   content: string;
-  id: number;
-  replies?: FeedbacksCommentReplies[];
+  replies: FeedbacksCommentReplay[];
   user: UserComment;
 };
 
@@ -29,8 +29,9 @@ export type User = {
   upvoteFeedbackIDs: string[];
 };
 
-export type FeedbacksCommentReplies = {
+export type FeedbacksCommentReplay = {
+  id: string;
   content: string;
   replyingTo: string;
-  user: User;
+  user: UserComment;
 };
