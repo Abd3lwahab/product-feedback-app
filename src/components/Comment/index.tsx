@@ -79,6 +79,7 @@ function Comment({ comment, feedbackId }: Props) {
           width={40}
           height={40}
           className="rounded-full"
+          unoptimized
         />
       </div>
       <div className="flex flex-1 flex-col">
