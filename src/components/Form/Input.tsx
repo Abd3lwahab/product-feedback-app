@@ -8,9 +8,19 @@ type Props = {
   placeholder?: string;
   onChange: (value: string) => void;
   rows?: number;
+  defaultValue?: string;
 };
 
-function Input({ id, label, description, type, placeholder, rows = 4, onChange }: Props) {
+function Input({
+  id,
+  label,
+  description,
+  type,
+  placeholder,
+  defaultValue,
+  rows = 4,
+  onChange,
+}: Props) {
   const [isValid, setIsValid] = useState<boolean>(true);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -41,7 +51,7 @@ function Input({ id, label, description, type, placeholder, rows = 4, onChange }
           onInvalid={() => setIsValid(false)}
           onChange={handleChange}
           placeholder={placeholder}
-          defaultValue={''}
+          defaultValue={defaultValue}
         />
       ) : (
         <textarea
@@ -57,7 +67,7 @@ function Input({ id, label, description, type, placeholder, rows = 4, onChange }
           onInvalid={() => setIsValid(false)}
           onChange={handleChange}
           placeholder={placeholder}
-          defaultValue={''}
+          defaultValue={defaultValue}
         />
       )}
       {!isValid && (

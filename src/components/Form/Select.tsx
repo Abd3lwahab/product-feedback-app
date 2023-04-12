@@ -10,11 +10,12 @@ type Props = {
   description: string;
   options: string[];
   onChange: (value: string) => void;
+  selectedValue?: string;
 };
 
-function Select({ id, label, description, options, onChange }: Props) {
+function Select({ id, label, description, options, selectedValue, onChange }: Props) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(options[0]);
+  const [selected, setSelected] = useState(selectedValue || options[0]);
 
   const selectRef = useRef<HTMLDivElement>(null);
 
@@ -53,7 +54,7 @@ function Select({ id, label, description, options, onChange }: Props) {
           <Image src={isOpen ? ArrowUp : ArrowDown} alt="arrow" />
         </div>
         {isOpen && (
-          <div className="absolute top-16 flex flex-row w-[452px] bg-white rounded-lg  shadow-[0px_10px_40px_-7px_rgba(55,63,104,0.350492)]">
+          <div className="absolute top-16 flex flex-row w-[476px] bg-white rounded-lg  shadow-[0px_10px_40px_-7px_rgba(55,63,104,0.350492)] z-50">
             <ul className="flex flex-col w-full">
               {options.map((option, idx) => (
                 <li
