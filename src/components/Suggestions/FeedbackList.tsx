@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useRecoilState } from 'recoil';
 
 import { Feedback } from '@/types';
@@ -14,8 +14,6 @@ function FeedbackList() {
   const [feedbackList] = useRecoilState<Feedback[]>(feedbackListState);
   const [activeFilter] = useRecoilState<string>(activeFeedbackFilterState);
   const [activeSort] = useRecoilState<string>(activeFeedbackSortState);
-
-  const [sortedFeedbacksState, setSortedFeedbacksState] = useState<Feedback[]>(feedbackList);
 
   const filteredFeedbacks =
     activeFilter === 'all'
