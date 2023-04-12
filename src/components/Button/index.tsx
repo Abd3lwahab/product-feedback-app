@@ -13,10 +13,9 @@ function Button({ color, text, onClick, customClass, isLoading, ...props }: Prop
     <div className={customClass}>
       <button
         onClick={onClick}
-        className={`bg-${color} text-white rounded-lg h-11 px-6 text-h4 hover:brightness-110 focus:ring-2 focus:ring-${color}
-         focus:ring-opacity-50 capitalize flex flex-row justify-center items-center w-full ${
-           isLoading && 'cursor-not-allowed'
-         }`}
+        className={`bg-${color} text-white rounded-lg h-11 px-6 text-h4 hover:brightness-110 focus:ring-2 focus:ring-${color} focus:ring-opacity-50 capitalize flex flex-row justify-center items-center w-full ${
+          isLoading && 'cursor-not-allowed'
+        }`}
         disabled={isLoading}
         {...props}
       >
