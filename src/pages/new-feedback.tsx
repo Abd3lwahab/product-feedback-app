@@ -35,16 +35,16 @@ export default function newFeedback() {
   };
 
   return (
-    <div className="flex flex-col justify-start py-9 md:py-14 lg:py-[94px] max-w-[540px] m-auto px-6">
+    <div className="flex flex-col justify-start py-9 md:py-14 lg:py-[94px] max-w-[540px] m-auto md:px-0 px-6">
       <div className="felx flex-row mb-16">
-        <Link href={'/'} className="">
+        <Link href={'/'}>
           <Image src={ArrowIcon} alt="arrow" className="inline mr-3" />
           <span className="text-blue-gray text-body-3 font-bold">Go Back</span>
         </Link>
       </div>
       <div className="bg-white rounded-lg pt-14 pb-6 px-6 relative">
         <div className="absolute -top-7 left-6 flex justify-center items-center">
-          <Image src={NewFeedbackIcon} alt="plus" />
+          <Image src={NewFeedbackIcon} alt="plus" width={56} height={56} />
         </div>
         <h1 className="text-h1 text-blue-dark mb-10">Create New Feedback</h1>
         <form onSubmit={handleSubmit}>
