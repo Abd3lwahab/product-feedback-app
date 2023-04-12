@@ -9,6 +9,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       return handlePOST(req, res);
     case 'PUT':
       return handlePUT(req, res);
+    case 'DELETE':
+      return handleDELETE(req, res);
     default:
       return res.status(500).json({ error: `The HTTP ${req.method} method is not supported.` });
   }
@@ -21,25 +23,64 @@ const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
   const { title, category, description } = req.body;
-  const result = await prisma.feedback.create({
-    data: {
-      title: title,
-      category: category,
-      description: description,
-    },
-  });
-  return res.status(201).json(result);
+  await prisma.feedback
+    .create({
+      data: {
+        title: title,
+        category: category,
+        description: description,
+      },
+    })
+    .then(result => {
+      return res.status(201).json(result);
+    })
+    .catch(err => {
+      return res.status(500).json({
+        message: 'Something went wrong',
+        error: err,
+      });
+    });
 };
 
 const handlePUT = async (req: NextApiRequest, res: NextApiResponse) => {
   const { feedbackId, data } = req.body;
-  const result = await prisma.feedback.update({
-    where: {
-      id: feedbackId,
-    },
-    data: data,
-  });
-  return res.status(200).json({
-    message: 'Feedback updated successfully',
-  });
+  const result = await prisma.feedback
+    .update({
+      where: {
+        id: feedbackId,
+      },
+      data: data,
+    })
+    .then(() => {
+      return res.status(200).json({
+        message: 'Feedback updated successfully',
+      });
+    })
+    .catch(err => {
+      return res.status(500).json({
+        message: 'Something went wrong',
+        error: err,
+      });
+    });
+};
+
+const handleDELETE = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { feedbackId } = req.body;
+  await prisma.feedback
+    .delete({
+      where: {
+        id: feedbackId,
+      },
+    })
+    .then(() => {
+      return res.status(200).json({
+        message: 'Feedback deleted successfully',
+      });
+    })
+    .catch(err => {
+      return res.status(500).json({
+        message: 'Something went wrong',
+        error: err,
+      });
+    });
 };
