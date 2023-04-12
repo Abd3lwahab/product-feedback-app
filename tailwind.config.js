@@ -1,6 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  content: [
+    // using ./src/ dir
+    './src/**/*.{js,ts,jsx,tsx}',
+    // using ./ dir
+    './app/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}',
+    // add more paths here
+  ],
   theme: {
     colors: {
       cyan: '#62BCFA',
@@ -69,4 +76,9 @@ module.exports = {
     },
   },
   plugins: [],
+  safelist: [
+    {
+      pattern: /bg-(red|blue-dark|blue)/,
+    },
+  ],
 };
