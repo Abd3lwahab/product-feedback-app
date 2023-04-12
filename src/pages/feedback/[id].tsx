@@ -1,30 +1,36 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRecoilState } from 'recoil';
 import axios from 'axios';
 import prisma from '@/lib/prisma';
-import { Feedback, User } from '@/types';
+import { Feedback, FeedbacksComment, User } from '@/types';
 import ArrowIcon from '@/assets/shared/icon-arrow-left.svg';
 import FeedbackItem from '@/components/Suggestions/FeedbackItem';
 import Button from '@/components/Button';
 import Input from '@/components/Form/Input';
 import { currentUserState } from '@/atoms/currentUserAtom';
 import Comment from '@/components/Comment';
+import ObjectID from 'bson-objectid';
+import { currentCommentListState } from '@/atoms/currentCommentListAtom';
 
 type Props = {
   feedback: Feedback;
 };
 
 function feeddback({ feedback }: Props) {
+  const [currentCommentList, setCurrentCommentList] =
+    useRecoilState<FeedbacksComment[]>(currentCommentListState);
   const [comment, setComment] = useState<string>('');
-  const [comments, setComments] = useState<Feedback['comments']>(feedback.comments);
   const [remainingCharacters, setRemainingCharacters] = useState<number>(250);
-  const [currentUser] = useRecoilState<User>(currentUserState);
   const [isCommenting, setIsCommenting] = useState<boolean>(false);
-
+  const [currentUser] = useRecoilState<User>(currentUserState);
   const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    setCurrentCommentList(feedback.comments);
+  }, []);
 
   const onCommentChange = (value: string) => {
     setComment(value);
@@ -38,23 +44,26 @@ function feeddback({ feedback }: Props) {
     setIsCommenting(true);
 
     const newComment = {
-      id: comments.length + 1,
+      id: ObjectID() as unknown as string,
       content: comment,
       user: {
         name: currentUser.name,
         username: currentUser.username,
         image: currentUser.image,
       },
+      replies: [],
     };
+
+    const newCommentList = [...currentCommentList, newComment];
 
     axios
       .put(`/api/feedback`, {
         feedbackId: feedback.id,
-        data: { comments: [...comments, newComment] },
+        data: { comments: newCommentList },
       })
       .then(res => {
         if (res.status === 200) {
-          setComments([...comments, newComment]);
+          setCurrentCommentList(newCommentList);
           setRemainingCharacters(250);
           setIsCommenting(false);
           formRef.current?.reset();
@@ -62,9 +71,13 @@ function feeddback({ feedback }: Props) {
       });
   };
 
+  const handlePostReply = (newCommentsList: FeedbacksComment[]) => {
+    setCurrentCommentList(newCommentsList);
+  };
+
   return (
-    <div className="flex flex-col justify-start py-9 md:py-14 lg:py-[94px] max-w-[730px] m-auto px-6">
-      <div className="flex flex-row justify-between items-center mb-6">
+    <div className="flex flex-col justify-start py-9 md:py-14 lg:py-[94px] max-w-[730px] m-auto md:px-0">
+      <div className="flex flex-row justify-between items-center mb-6 mx-6 md:mx-0">
         <Link href={'/'} className="">
           <Image src={ArrowIcon} alt="arrow" className="inline mr-3" />
           <span className="text-blue-gray text-body-3 font-bold">Go Back</span>
@@ -72,10 +85,10 @@ function feeddback({ feedback }: Props) {
         <Button color="blue" text="edit feedback" />
       </div>
       <FeedbackItem feedback={feedback} />
-      <div className="bg-white p-6 md:p-8 rounded-lg mb-6 flex flex-col mx-6 md:mx-0">
-        <h2 className="text-blue-dark text-h3 font-bold mb-7">{comments.length} Comments</h2>
-        {comments.map(comment => (
-          <Comment comment={comment} key={comment.id} />
+      <div className="bg-white px-6 py-6 md:pt-6 md:pb-4 md:px-8 rounded-lg mb-6 flex flex-col mx-6 md:mx-0">
+        <h2 className="text-blue-dark text-h3 font-bold">{currentCommentList.length} Comments</h2>
+        {currentCommentList.map(comment => (
+          <Comment key={comment.id} comment={comment} feedbackId={feedback.id} />
         ))}
       </div>
       <form
@@ -89,6 +102,7 @@ function feeddback({ feedback }: Props) {
           placeholder="Type your comment here"
           id="comment"
           onChange={onCommentChange}
+          rows={3}
         />
         <div className="flex flex-row justify-between items-center">
           <span className="text-body-2 text-blue-gray">{remainingCharacters} Characters left</span>

@@ -1,25 +1,25 @@
 import { FeedbacksComment, FeedbacksCommentReplay, User } from '@/types';
 import Image from 'next/image';
 import React, { useState } from 'react';
-import Input from '../Form/Input';
 import Button from '../Button';
-import { useRecoilState } from 'recoil';
-import { currentUserState } from '@/atoms/currentUserAtom';
+import Input from '../Form/Input';
 import ObjectID from 'bson-objectid';
 import axios from 'axios';
-import Replay from '../Replay';
+import { useRecoilState } from 'recoil';
+import { currentUserState } from '@/atoms/currentUserAtom';
 import { currentCommentListState } from '@/atoms/currentCommentListAtom';
 
 type Props = {
-  comment: FeedbacksComment;
   feedbackId: string;
+  replay: FeedbacksCommentReplay;
+  comment: FeedbacksComment;
 };
 
-function Comment({ comment, feedbackId }: Props) {
+function Replay({ replay, feedbackId, comment }: Props) {
   const [currentCommentList, setCurrentCommentList] =
     useRecoilState<FeedbacksComment[]>(currentCommentListState);
-  const [replay, setReplay] = useState<string>('');
   const [isReplying, setIsReplying] = useState<boolean>(false);
+  const [replayValue, setReplayValue] = useState<string>('');
   const [currentUser] = useRecoilState<User>(currentUserState);
 
   const handleReply = () => {
@@ -27,16 +27,16 @@ function Comment({ comment, feedbackId }: Props) {
   };
 
   const handleReplayChange = (value: string) => {
-    setReplay(value);
+    setReplayValue(value);
   };
 
   const handlePostReply = () => {
-    if (replay === '') return;
+    if (replayValue === '') return;
 
     const newReplay = {
       id: ObjectID() as unknown as string,
-      content: replay,
-      replyingTo: comment.user.username,
+      content: replayValue,
+      replyingTo: replay.user.username,
       user: {
         name: currentUser.name,
         username: currentUser.username,
@@ -44,7 +44,7 @@ function Comment({ comment, feedbackId }: Props) {
       },
     };
 
-    const newCommentList = currentCommentList.map(currentComment => {
+    const newComments = currentCommentList.map(currentComment => {
       if (comment.id === currentComment.id) {
         return {
           ...comment,
@@ -57,24 +57,23 @@ function Comment({ comment, feedbackId }: Props) {
     axios
       .put(`/api/feedback`, {
         feedbackId: feedbackId,
-        data: { comments: newCommentList },
+        data: { comments: newComments },
       })
       .then(res => {
         if (res.status === 200) {
-          setCurrentCommentList(newCommentList);
+          setCurrentCommentList(newComments);
           setIsReplying(false);
         }
       });
   };
-
   return (
     <div
-      key={comment.id}
+      key={replay.id}
       className={`flex flex-row border-t-[1px] border-[#8C92B3] border-opacity-25 first-of-type:border-none pt-8`}
     >
       <div className="flex-none mr-8 w-10 h-10">
         <Image
-          src={`/${comment.user.image}`}
+          src={`/${replay.user.image}`}
           alt="user"
           width={40}
           height={40}
@@ -84,8 +83,8 @@ function Comment({ comment, feedbackId }: Props) {
       <div className="flex flex-1 flex-col">
         <div className="flex flex-row justify-between">
           <div className="flex flex-col mb-4">
-            <span className="text-body-3 font-bold text-blue-dark">{comment.user.name}</span>
-            <span className="text-body-3 text-blue-gray">@{comment.user.username}</span>
+            <span className="text-body-3 font-bold text-blue-dark">{replay.user.name}</span>
+            <span className="text-body-3 text-blue-gray">@{replay.user.username}</span>
           </div>
           <div>
             <span
@@ -96,25 +95,10 @@ function Comment({ comment, feedbackId }: Props) {
             </span>
           </div>
         </div>
-        <p
-          className={`text-body-2 text-blue-gray [overflow-wrap:anywhere] ${
-            !comment.replies.length && ' mb-8'
-          }`}
-        >
-          {comment.content}
+        <p className="text-body-2 text-blue-gray [overflow-wrap:anywhere] mb-8">
+          <span className="font-bold text-purple">@{replay.replyingTo} </span>
+          {replay.content}
         </p>
-        {comment.replies.length > 0 && (
-          <div className="flex flex-col">
-            {comment.replies.map(repaly => (
-              <Replay
-                replay={repaly}
-                key={`${repaly.id}`}
-                feedbackId={feedbackId}
-                comment={comment}
-              />
-            ))}
-          </div>
-        )}
         {isReplying && (
           <div className="flex flex-row items-start">
             <div className="flex-1">
@@ -141,4 +125,4 @@ function Comment({ comment, feedbackId }: Props) {
   );
 }
 
-export default Comment;
+export default Replay;

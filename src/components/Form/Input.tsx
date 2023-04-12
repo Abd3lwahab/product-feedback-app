@@ -7,9 +7,10 @@ type Props = {
   type: 'text' | 'textarea';
   placeholder?: string;
   onChange: (value: string) => void;
+  rows?: number;
 };
 
-function Input({ id, label, description, type, placeholder, onChange }: Props) {
+function Input({ id, label, description, type, placeholder, rows = 4, onChange }: Props) {
   const [isValid, setIsValid] = useState<boolean>(true);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -51,7 +52,7 @@ function Input({ id, label, description, type, placeholder, onChange }: Props) {
               ? 'focus:ring-blue focus:ring-[1px] hover:ring-blue hover:ring-[1px]'
               : 'invalid:ring-red invalid:ring-[1px] invalid:focus:ring-red invalid:focus:ring-[1px] invalid:hover:ring-red invalid:hover:ring-[1px]'
           }`}
-          rows={4}
+          rows={rows}
           required={true}
           onInvalid={() => setIsValid(false)}
           onChange={handleChange}
