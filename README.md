@@ -39,8 +39,8 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://github.com/Abdelwahab07/product-feedback-app)
-- Live Site URL: [Add live site URL here](https://product-feedback-app-fawn.vercel.app)
+- Solution URL: [https://github.com/Abdelwahab07/product-feedback-app](https://github.com/Abdelwahab07/product-feedback-app)
+- Live Site URL: [https://product-feedback-app-fawn.vercel.app](https://product-feedback-app-fawn.vercel.app)
 
 ## My process
 
@@ -49,7 +49,7 @@ Users should be able to:
 - [Next.js](https://nextjs.org/) - React framework with SSR
 - [MongoDB](https://www.mongodb.com) - For database
 - [Prisma](https://prisma.io) - ORM for mongodb
-- [Tailwind CSS](https://tailwindcss.com/docs) - For styles
+- [TailwindCSS](https://tailwindcss.com/docs) - For styles
 - [Recoil](https://recoiljs.org) - For state management
 - TypeScript
 
