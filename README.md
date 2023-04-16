@@ -14,7 +14,6 @@ This is a solution to the [Product feedback app challenge on Frontend Mentor](ht
   - [Continued development](#continued-development)
   - [Useful resources](#useful-resources)
 - [Author](#author)
-- [Acknowledgments](#acknowledgments)
 
 **Note: Delete this note and update the table of contents based on what sections you keep.**
 
@@ -79,5 +78,5 @@ Planning to add authintication using auth0 and add more features like search and
 
 ## Author
 
-- Frontend Mentor - [@yourusername](https://www.frontendmentor.io/profile/Abdelwahab07)
-- Twitter - [@yourusername](https://www.twitter.com/Abdelwahab_07)
+- Frontend Mentor - [@Abdelwahab07](https://www.frontendmentor.io/profile/Abdelwahab07)
+- Twitter - [@Abdelwahab_07](https://www.twitter.com/Abdelwahab_07)
