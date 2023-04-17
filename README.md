@@ -39,7 +39,7 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [https://www.frontendmentor.io/solutions/productfeedbackapp-usign-nextjs-bsr_rJWvBm](Frontend Mentor Solution)
+- Solution URL: [Frontend Mentor Solution](https://www.frontendmentor.io/solutions/productfeedbackapp-usign-nextjs-bsr_rJWvBm)
 - Live Site URL: [https://product-feedback-app-fawn.vercel.app](https://product-feedback-app-fawn.vercel.app)
 
 ## My process
